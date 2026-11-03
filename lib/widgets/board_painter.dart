@@ -223,7 +223,8 @@ class BoardPainter extends CustomPainter {
         ),
         textDirection: TextDirection.ltr,
       )..layout();
-      final cy = g.rowY(row) + g.roadHalf + 14;
+      // En haut de la bande de décor de l'étape (le décor est au-dessus de sa route).
+      final cy = g.gapTop(row) + 8;
       final pill = RRect.fromRectAndRadius(
         Rect.fromCenter(
             center: Offset(g.width / 2, cy), width: tp.width + 22, height: 17),

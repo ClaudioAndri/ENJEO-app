@@ -235,7 +235,7 @@ class _GameScreenState extends State<GameScreen> {
                     child: RouteBoard(
                       positions: viz,
                       players: widget.players,
-                      current: game.current,
+                      current: focus,
                       focus: focus,
                     ),
                   ),
@@ -268,7 +268,8 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _playerChip(int i) {
     final p = widget.players[i];
-    final active = i == game.current;
+    // `focus` = joueur qui agit : il ne change qu'une fois le résultat affiché.
+    final active = i == focus;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 3),
       padding: const EdgeInsets.all(4),
@@ -310,7 +311,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Widget _bottomPanel() {
-    final p = currentPlayer;
+    final p = widget.players[focus];
     final canTap = !busy && game.winner == null && !p.isAi;
     return Container(
       width: double.infinity,
@@ -345,11 +346,15 @@ class _GameScreenState extends State<GameScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            p.isAi
-                ? L10n.tr('computer_choosing', {'name': p.name})
-                : L10n.tr('pick_box'),
-            style: const TextStyle(color: Color(0xCCFFFFFF), fontSize: 12),
+          // L'invite « Choisis une box » disparaît pendant que le résultat s'affiche.
+          Opacity(
+            opacity: (busy && !p.isAi) ? 0.0 : 1.0,
+            child: Text(
+              p.isAi
+                  ? L10n.tr('computer_choosing', {'name': p.name})
+                  : L10n.tr('pick_box'),
+              style: const TextStyle(color: Color(0xCCFFFFFF), fontSize: 12),
+            ),
           ),
         ],
       ),
