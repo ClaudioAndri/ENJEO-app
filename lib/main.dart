@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'screens/splash_screen.dart';
+import 'l10n/strings.dart';
 import 'storage/settings_store.dart';
 import 'theme.dart';
 
@@ -9,6 +10,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await SettingsStore.init();
+  L10n.setLocale(SettingsStore.lang);
   runApp(const EnjeoApp());
 }
 

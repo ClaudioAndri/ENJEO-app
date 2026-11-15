@@ -38,10 +38,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     ListTile(
                       title: Text(L10n.tr('language')),
-                      subtitle: Text(L10n.tr('lang_soon')),
-                      trailing: Text(
-                        L10n.tr('lang_fr'),
-                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      trailing: SegmentedButton<String>(
+                        showSelectedIcon: false,
+                        segments: [
+                          for (final c in L10n.supported)
+                            ButtonSegment(value: c, label: Text(L10n.tr('lang_$c'))),
+                        ],
+                        selected: {L10n.locale},
+                        onSelectionChanged: (s) {
+                          L10n.setLocale(s.first);
+                          SettingsStore.setLang(s.first);
+                          setState(() {});
+                        },
                       ),
                     ),
                   ],

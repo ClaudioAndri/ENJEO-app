@@ -1,11 +1,25 @@
-/// Système de localisation simple. Français complet ; le malagasy (mg) et
-/// l'anglais (en) peuvent être ajoutés en remplissant leur table : toute clé
-/// manquante retombe automatiquement sur le français.
+import 'package:flutter/foundation.dart';
+
+/// Système de localisation simple. Malagasy (langue principale) et français
+/// (langue secondaire). Toute clé manquante retombe sur le malagasy puis le
+/// français.
 class L10n {
-  static String locale = 'fr';
+  static const String defaultLocale = 'mg';
+  static const List<String> supported = ['mg', 'fr'];
+
+  static String locale = defaultLocale;
+
+  /// Notifie les écrans qui doivent se redessiner quand la langue change.
+  static final ValueNotifier<String> notifier = ValueNotifier(defaultLocale);
+
+  static void setLocale(String code) {
+    if (!supported.contains(code)) return;
+    locale = code;
+    notifier.value = code;
+  }
 
   static String tr(String key, [Map<String, String> params = const {}]) {
-    var s = _tables[locale]?[key] ?? _tables['fr']![key] ?? key;
+    var s = _tables[locale]?[key] ?? _tables['mg']![key] ?? _tables['fr']![key] ?? key;
     params.forEach((k, v) {
       s = s.replaceAll('{$k}', v);
     });
@@ -14,8 +28,7 @@ class L10n {
 
   static const Map<String, Map<String, String>> _tables = {
     'fr': _fr,
-    'mg': {},
-    'en': {},
+    'mg': _mg,
   };
 
   static const Map<String, String> _fr = {
@@ -87,11 +100,88 @@ class L10n {
     'settings_title': 'Paramètres',
     'sound': 'Sons',
     'language': 'Langue',
+    'lang_mg': 'Malagasy',
     'lang_fr': 'Français',
-    'lang_soon': 'Malagasy et English : bientôt',
     'about_title': 'À propos',
     'about_text':
         'ENJEO — TAXIBE est un jeu de course inspiré des taxi-brousse de Madagascar. « ENJEO » signifie « Poursuis-moi » en malagasy.',
     'version': 'Version de test 0.1.0',
+  };
+
+  static const Map<String, String> _mg = {
+    'app_name': 'ENJEO',
+    'tagline': 'TAXIBE',
+    'meaning': '« Enjeo aho »',
+    'play': 'Hilalao',
+    'settings': 'Fanamboarana',
+    'rules': 'Fitsipika',
+    'about': 'Momba ny lalao',
+    'players_title': 'Mpilalao firy?',
+    'one_player': 'Mpilalao 1',
+    'one_player_sub': 'Hanohitra ny solosaina',
+    'n_players': 'Mpilalao {n}',
+    'n_players_sub': 'Amin’ny telefaona iray',
+    'setup_title': 'Fanomanana',
+    'player_name': 'Anaran’ny mpilalao {n}',
+    'your_name': 'Ny anaranao',
+    'default_player': 'Mpilalao {n}',
+    'bus_color': 'Ny lokon’ny taxi-be',
+    'ai_level': 'Haavon’ny solosaina : Antonony',
+    'start': 'Hanomboka',
+    'computer': 'Solosaina',
+    'color_red': 'Mena',
+    'color_blue': 'Manga',
+    'color_yellow': 'Mavo',
+    'color_green': 'Maitso',
+    'pause': 'Fiatoana',
+    'resume': 'Hanohy',
+    'restart': 'Hanomboka indray',
+    'quit': 'Hiala',
+    'turn_of': 'Ny anjaran’i {name}',
+    'computer_choosing': '{name} mifidy…',
+    'pick_box': 'Mifidiana boaty iray',
+    'msg_exit': 'Nivoaka ny garazy i {name} ! Milalao indray izy.',
+    'msg_no_six': 'Tsy misy 6 : mijanona ao amin’ny garazy ny taxi-ben’i {name}.',
+    'msg_move': 'Mandroso {n} i {name}.',
+    'msg_move_replay': 'Mandroso {n} i {name} ary milalao indray !',
+    'msg_pra': 'PRA ! Miverina any amin’ny garazy i {name}.',
+    'msg_capture': 'Nahatratra an’i {other} i {name} ! Miverina any amin’ny garazy i {other}.',
+    'msg_blocked': 'Tsy afaka mihoatra ny G i {name} : mila {n} marina.',
+    'progress': 'Fandrosoana mankany G',
+    'garage': 'GARAZY',
+    'region_0': 'Tany Ambony',
+    'region_1': 'Ala Atsinanana',
+    'region_2': 'Tendrombohitra Isalo',
+    'region_3': 'Tsingin’i Bemaraha',
+    'region_4': 'Nosy Be',
+    'region_5': 'Lalan’ny Renala',
+    'departure': 'FIAROVANA',
+    'victory_title': 'TONGA NY FARANY !',
+    'victory_text': 'Tonga any G i {name} !',
+    'victory_enjeo': 'ENJEO !',
+    'play_again': 'Hilalao indray',
+    'back_menu': 'Fandraisana',
+    'rules_title': 'Ahoana ny fomba filalaovana?',
+    'rules_intro':
+        'Fifaninanana taxi-be manomboka amin’ny A mankany G : dingana 6 misy borne 12, dia borne 72 daholo.',
+    'r1': 'Mila 6 ianao mba hivoahan’ny taxi-benao avy ao amin’ny garazy.',
+    'r2': 'Isaky ny anjara dia misy boaty telo mikatona : mifidiana iray.',
+    'r3': 'Ny isa miseho no isan’ny borne handehanana.',
+    'r4': 'Ny 1 na ny 6 dia ahafahanao milalao indray (ao amin’ny garazy, ny 6 ihany no raisina).',
+    'r5': 'Ny PRA dia eo amin’ny borne faha-8 isaky ny dingana.',
+    'r6': 'Raha mijanona marina eo amin’ny PRA ianao dia miverina any amin’ny garazy.',
+    'r7': 'Raha misy mpifaninana mijanona marina eo amin’ny taxi-benao dia miverina any amin’ny garazy ianao.',
+    'r8': 'Tsy afaka mihoatra ny G ianao : mijanona eo ny taxi-be.',
+    'r9': 'Tsy maintsy tonga marina eo amin’ny borne farany.',
+    'r10': 'Ny voalohany tonga any G no mandresy !',
+    'settings_title': 'Fanamboarana',
+    'sound': 'Feo',
+    'language': 'Fiteny',
+    'lang_mg': 'Malagasy',
+    'lang_fr': 'Français',
+    'about_title': 'Momba ny lalao',
+    'about_text':
+        'ENJEO — TAXIBE dia lalao fifaninanana nahazo aingam-panahy avy amin’ny taxi-be eto Madagasikara.',
+    'version': 'Dikan-teny fitsapana 0.1.0',
   };
 }

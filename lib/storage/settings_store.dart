@@ -18,6 +18,13 @@ class SettingsStore {
     await _p?.setBool('sound', v);
   }
 
+  /// Langue choisie ('mg' par défaut).
+  static String get lang => _p?.getString('lang') ?? 'mg';
+
+  static Future<void> setLang(String v) async {
+    await _p?.setString('lang', v);
+  }
+
   static String playerName(int i) => _p?.getString('name$i') ?? '';
 
   static Future<void> setPlayerName(int i, String v) async {

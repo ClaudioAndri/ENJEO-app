@@ -17,6 +17,14 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Se redessine quand la langue change dans les paramètres.
+    return ValueListenableBuilder<String>(
+      valueListenable: L10n.notifier,
+      builder: (context, _, __) => _content(context),
+    );
+  }
+
+  Widget _content(BuildContext context) {
     return Scaffold(
       body: Backdrop(
         child: Padding(
